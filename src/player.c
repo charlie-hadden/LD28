@@ -68,10 +68,6 @@ player_update(unsigned int delta_time) {
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
 		vec3_scale(vel, vel, 0.6);
 
-	float dist_x = vel[0];
-	float dist_y = vel[1];
-	float dist = sqrt(dist_x * dist_x + dist_y * dist_y);
-
 	x_ += vel[0];
 	y_ += vel[1];
 

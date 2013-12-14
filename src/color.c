@@ -12,9 +12,9 @@ color_init(void) {
 
 void
 color_update(unsigned int delta_time) {
-	float r = delta_time;
-	float g = delta_time;
-	float b = delta_time;
+//	float r = delta_time;
+//	float g = delta_time;
+//	float b = delta_time;
 
 	background_.r += 1;
 	background_.g += 1;

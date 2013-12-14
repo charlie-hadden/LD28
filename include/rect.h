@@ -13,5 +13,6 @@ void rect_free(rect_t *rect);
 
 bool rect_intersecting(rect_t *a, rect_t *b);
 bool rect_contains_point(rect_t *rect, float x, float y);
+bool rect_line_intersecs(rect_t *rect, float x0, float y0, float x1, float y1);
 
 #endif // RECT_H
