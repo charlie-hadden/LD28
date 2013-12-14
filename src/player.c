@@ -4,7 +4,7 @@ static float x_ = 0, y_ = 0;
 static int size_ = 0;
 static rect_t *rect_;
 
-static int fire_time = 500, fire_cooldown = 0;
+static int fire_time = 100, fire_cooldown = 0;
 
 static void fire(void);
 
@@ -31,8 +31,16 @@ player_update(unsigned int delta_time) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	x_ = mouse_x;
-	y_ = mouse_y;
+//	x_ = mouse_x;
+//	y_ = mouse_y;
+
+	vec3 vel = { mouse_x - x_, mouse_y - y_, 0 };
+	if (vec3_len(vel)) {
+		vec3_norm(vel, vel);
+		vec3_scale(vel, vel, 0.8 * delta_time);
+		x_ += vel[0];
+		y_ += vel[1];
+	}
 
 	fire_cooldown -= delta_time;
 	if (fire_cooldown <= 0) {
@@ -43,6 +51,7 @@ player_update(unsigned int delta_time) {
 
 void
 player_draw(void) {
+	// Draw the player
 	glColor3f(0.8f, 0.2f, 0.2f);
 
 	glPushMatrix();
@@ -57,6 +66,17 @@ player_draw(void) {
 
 	glEnd();
 	glPopMatrix();
+
+	// Draw the cursor
+	int mouse_x, mouse_y;
+	SDL_GetMouseState(&mouse_x, &mouse_y);
+	glEnable(GL_POINT_SMOOTH);
+	glPointSize(10);
+	glColor3f(0.1, 0.7, 0.1);
+	glBegin(GL_POINTS);
+	glVertex2f(mouse_x, mouse_y);
+	glEnd();
+	glDisable(GL_POINT_SMOOTH);
 }
 
 rect_t*
