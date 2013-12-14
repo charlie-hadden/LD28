@@ -1,19 +1,16 @@
 #include "bullet.h"
 
-static vector_t *bullets_;
+static bullet_t *bullets_[MAX_BULLETS];
 
 void
 bullet_init(void) {
-	bullets_ = vector_create();
 }
 
 void
 bullet_cleanup(void) {
-	for (unsigned i = 0; i < vector_count(bullets_); i++) {
-		bullet_free(vector_get(bullets_, i));
+	for (unsigned i = 0; i < MAX_BULLETS; i++) {
+		bullet_free(bullets_[i]);
 	}
-
-	vector_free(bullets_);
 }
 
 bullet_t*
@@ -24,30 +21,39 @@ bullet_create(void) {
 
 void
 bullet_free(bullet_t *bullet) {
-	printf("1\n");
-	rect_free(bullet->rect);
-	printf("2\n");
-	free(bullet);
-	printf("3\n");
+	if (bullet) {
+		rect_free(bullet->rect);
+		free(bullet);
+	}
 }
 
 void
 bullet_spawn(bullet_t *bullet) {
-	vector_add(bullets_, bullet);
+	for (unsigned i = 0; i < MAX_BULLETS; i++) {
+		if (bullets_[i] == NULL) {
+			bullets_[i] = bullet;
+			return;
+		}
+	}
+
+	printf("Too many bullets!\n");
 }
 
 void
 bullet_update(unsigned int delta_time) {
 	rect_t *player = player_get_rect();
 
-	for (unsigned i = 0; i < vector_count(bullets_); i++) {
-		bullet_t *bullet = vector_get(bullets_, i);
+	for (unsigned i = 0; i < MAX_BULLETS; i++) {
+		bullet_t *bullet = bullets_[i];
+		if (bullet == NULL)
+			continue;
+
 		bullet->rect->x += bullet->x_vel * delta_time;
 		bullet->rect->y += bullet->y_vel * delta_time;
 
 		if (rect_intersecting(player, bullet->rect)) {
-//			vector_delete(bullets_, i);
-//			bullet_free(bullet);
+			bullets_[i] = NULL;
+			bullet_free(bullet);
 		}
 	}
 }
@@ -57,8 +63,10 @@ bullet_draw(void) {
 	glColor3f(0.2f, 0.8f, 0.2f);
 	glBegin(GL_QUADS);
 
-	for (unsigned i = 0; i < vector_count(bullets_); i++) {
-		bullet_t *bullet = vector_get(bullets_, i);
+	for (unsigned i = 0; i < MAX_BULLETS; i++) {
+		bullet_t *bullet = bullets_[i];
+		if (bullet == NULL)
+			continue;
 
 		float x = bullet->rect->x, y = bullet->rect->y;
 		float half_w = bullet->rect->w / 2, half_h = bullet->rect->h / 2;

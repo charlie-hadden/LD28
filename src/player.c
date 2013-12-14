@@ -67,8 +67,6 @@ player_get_rect(void) {
 
 static void
 fire(void) {
-	printf("Fire\n");
-
 	bullet_t *bullet = bullet_create();
 	bullet->rect = rect_create(500, 400, 10, 10);
 	bullet->x_vel = 0;

@@ -2,7 +2,6 @@
 #define BULLET_H
 
 #include "common.h"
-#include "vector.h"
 #include "rect.h"
 #include "player.h"
 
@@ -16,6 +15,8 @@ typedef struct {
 	float x_vel, y_vel;
 	bullet_type type;
 } bullet_t;
+
+#define MAX_BULLETS 5000
 
 void bullet_init(void);
 void bullet_cleanup(void);
