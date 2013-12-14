@@ -4,7 +4,7 @@ static float x_ = 0, y_ = 0;
 static int size_ = 0;
 static rect_t *rect_;
 
-static int fire_time = 2, fire_cooldown = 0;
+static int fire_time = 500, fire_cooldown = 0;
 
 static void fire(void);
 
@@ -15,11 +15,15 @@ player_init(void) {
 	size_ = 50;
 
 	rect_ = rect_create(0, 0, 0, 0);
+
+	SDL_ShowCursor(0);
 }
 
 void
 player_cleanup(void) {
 	free(rect_);
+
+	SDL_ShowCursor(1);
 }
 
 void
