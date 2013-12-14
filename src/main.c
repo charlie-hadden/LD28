@@ -9,7 +9,7 @@ static void handle_event(SDL_Event *event);
 static void update(unsigned int delta_time);
 static void draw(void);
 
-int main(int argc, const char *argv[]) {
+int main(int argc, char *argv[]) {
 	init();
 
 	bool running = true;
