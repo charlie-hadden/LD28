@@ -6,7 +6,7 @@ static void init(void);
 static void cleanup(void);
 
 static void handle_event(SDL_Event *event);
-static void update(void);
+static void update(unsigned int delta_time);
 static void draw(void);
 
 int main(int argc, const char *argv[]) {
@@ -14,6 +14,8 @@ int main(int argc, const char *argv[]) {
 
 	bool running = true;
 	SDL_Event event;
+	unsigned int last_time = 0, current_time, delta_time;
+	unsigned int last_fps_time = 0, frames = 0;
 
 	while (running) {
 		while (SDL_PollEvent(&event)) {
@@ -23,7 +25,18 @@ int main(int argc, const char *argv[]) {
 			handle_event(&event);
 		}
 
-		update();
+		current_time = SDL_GetTicks();
+		delta_time = current_time - last_time;
+		last_time = current_time;
+
+		frames++;
+		if (current_time >= last_fps_time + 1000) {
+			printf("%u FPS\n", frames);
+			frames = 0;
+			last_fps_time = current_time;
+		}
+
+		update(delta_time);
 		draw();
 	}
 
@@ -51,7 +64,8 @@ handle_event(SDL_Event *event) {
 }
 
 static void
-update(void) {
+update(unsigned int delta_time) {
+	player_update(delta_time);
 }
 
 static void

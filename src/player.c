@@ -1,6 +1,6 @@
 #include "player.h"
 
-static int x_ = 0, y_ = 0;
+static float x_ = 0, y_ = 0;
 static int size_ = 0;
 
 void
@@ -12,6 +12,15 @@ player_init(void) {
 
 void
 player_cleanup(void) {
+}
+
+void
+player_update(unsigned int delta_time) {
+	int mouse_x, mouse_y;
+	SDL_GetMouseState(&mouse_x, &mouse_y);
+
+	x_ = mouse_x;
+	y_ = mouse_y;
 }
 
 void
