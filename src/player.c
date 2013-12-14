@@ -26,14 +26,55 @@ void
 player_update(unsigned int delta_time) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
+	const uint8_t *state = SDL_GetKeyboardState(NULL);
 
-	vec3 vel = { mouse_x - x_, mouse_y - y_, 0 };
+	vec3 vel = { 0, 0, 0 };
+
+	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP])
+		vel[1] -= 1;
+
+	if (state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN])
+		vel[1] += 1;
+
+	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
+		vel[0] -= 1;
+
+	if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
+		vel[0] += 1;
+
 	if (vec3_len(vel)) {
 		vec3_norm(vel, vel);
-		vec3_scale(vel, vel, 0.8 * delta_time);
-		x_ += vel[0];
-		y_ += vel[1];
+	} else if (mouse_x != x_ || mouse_y != y_) {
+		vel[0] = mouse_x - x_;
+		vel[1] = mouse_y - y_;
+		vec3_norm(vel, vel);
 	}
+
+	vec3_scale(vel, vel, 0.8 * delta_time);
+
+	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
+		vec3_scale(vel, vel, 0.6);
+
+	x_ += vel[0];
+	y_ += vel[1];
+
+	float dist = sqrt((mouse_x - x_) * (mouse_x - x_) + (mouse_y - y_) * (mouse_y - y_));
+	if (dist < 2) {
+		x_ = mouse_x;
+		y_ = mouse_y;
+	}
+
+	if (x_ - size_ / 2 < 0)
+		x_ = size_ / 2;
+
+	if (x_ + size_ / 2 >= window_width())
+		x_ = window_width() - size_ / 2;
+
+	if (y_ - size_ / 2 < 0)
+		y_ = size_ / 2;
+
+	if (y_ + size_ / 2 >= window_height())
+		y_ = window_height() - size_ / 2;
 
 	fire_cooldown -= delta_time;
 	if (fire_cooldown <= 0) {
@@ -44,22 +85,6 @@ player_update(unsigned int delta_time) {
 
 void
 player_draw(void) {
-	// Draw the player
-	glColor3f(0.8f, 0.2f, 0.2f);
-
-	glPushMatrix();
-	glTranslatef(x_, y_, 0.0f);
-
-	glBegin(GL_QUADS);
-
-	glVertex2f(-size_ / 2, -size_ / 2);
-	glVertex2f( size_ / 2, -size_ / 2);
-	glVertex2f( size_ / 2,  size_ / 2);
-	glVertex2f(-size_ / 2,  size_ / 2);
-
-	glEnd();
-	glPopMatrix();
-
 	// Draw the cursor
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -70,6 +95,18 @@ player_draw(void) {
 	glVertex2f(mouse_x, mouse_y);
 	glEnd();
 	glDisable(GL_POINT_SMOOTH);
+
+	// Draw the player
+	glColor3f(0.8f, 0.2f, 0.2f);
+	glPushMatrix();
+	glTranslatef(x_, y_, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex2f(-size_ / 2, -size_ / 2);
+	glVertex2f( size_ / 2, -size_ / 2);
+	glVertex2f( size_ / 2,  size_ / 2);
+	glVertex2f(-size_ / 2,  size_ / 2);
+	glEnd();
+	glPopMatrix();
 }
 
 rect_t*

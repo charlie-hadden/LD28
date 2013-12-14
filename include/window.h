@@ -7,6 +7,9 @@
 void window_init(const char *title, int width, int height);
 void window_cleanup(void);
 
+int window_width(void);
+int window_height(void);
+
 void window_swap(void);
 rect_t *window_get_rect(void);
 void window_set_grab(bool grab);

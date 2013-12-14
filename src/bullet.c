@@ -55,6 +55,7 @@ bullet_update(unsigned int delta_time) {
 			continue;
 		}
 
+		/*
 		bullet->rect->x += bullet->x_vel * delta_time;
 		bullet->rect->y += bullet->y_vel * delta_time;
 
@@ -64,6 +65,7 @@ bullet_update(unsigned int delta_time) {
 			game_gameover();
 			break;
 		}
+		*/
 	}
 }
 

@@ -3,10 +3,15 @@
 static SDL_Window *window_;
 static SDL_GLContext context_;
 
+static int width_, height_;
+
 static rect_t *rect_;
 
 void
 window_init(const char *title, int width, int height) {
+	width_ = width;
+	height_ = height;
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		die("Failed to initialize SDL");
 
@@ -38,6 +43,16 @@ window_cleanup(void) {
 	SDL_GL_DeleteContext(context_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
+}
+
+int
+window_width(void) {
+	return width_;
+}
+
+int
+window_height(void) {
+	return height_;
 }
 
 void
