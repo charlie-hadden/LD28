@@ -50,4 +50,8 @@ update(void) {
 
 static void
 draw(void) {
+	glClearColor(0.2f, 0.2f, 0.8f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	window_swap();
 }

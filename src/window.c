@@ -33,3 +33,8 @@ window_cleanup(void) {
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
 }
+
+void
+window_swap(void) {
+	SDL_GL_SwapWindow(window_);
+}
