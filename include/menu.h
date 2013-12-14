@@ -2,10 +2,12 @@
 #define MENU_H
 
 #include "common.h"
+#include "window.h"
 #include "rect.h"
 
 typedef struct {
-	const char *text;
+	GLuint text;
+	int w, h;
 	rect_t *rect;
 } menu_button_t;
 

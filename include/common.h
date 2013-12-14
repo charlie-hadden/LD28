@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <inttypes.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <GL/glew.h>
 #include <linmath.h>
 

@@ -24,9 +24,10 @@ window_init(const char *title, int width, int height) {
 	if (glew_status != GLEW_OK)
 		die("Could not initialize GLEW");
 
-	SDL_GL_SetSwapInterval(-1);
-
 	SDL_SetWindowGrab(window_, SDL_TRUE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void
@@ -39,4 +40,9 @@ window_cleanup(void) {
 void
 window_swap(void) {
 	SDL_GL_SwapWindow(window_);
+}
+
+SDL_Renderer*
+window_get_renderer(void) {
+	return SDL_GetRenderer(window_);
 }
