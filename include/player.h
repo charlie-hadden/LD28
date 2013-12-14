@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "rect.h"
+#include "bullet.h"
 
 void player_init(void);
 void player_cleanup(void);

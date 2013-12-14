@@ -24,8 +24,11 @@ bullet_create(void) {
 
 void
 bullet_free(bullet_t *bullet) {
+	printf("1\n");
 	rect_free(bullet->rect);
+	printf("2\n");
 	free(bullet);
+	printf("3\n");
 }
 
 void
@@ -43,8 +46,8 @@ bullet_update(unsigned int delta_time) {
 		bullet->rect->y += bullet->y_vel * delta_time;
 
 		if (rect_intersecting(player, bullet->rect)) {
-			vector_delete(bullets_, i);
-			bullet_free(bullet);
+//			vector_delete(bullets_, i);
+//			bullet_free(bullet);
 		}
 	}
 }

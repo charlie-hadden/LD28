@@ -55,6 +55,7 @@ init(void) {
 	bullet_init();
 	player_init();
 
+	/*
 	bullet_t *bullet = bullet_create();
 	bullet->rect = rect_create(50, 50, 10, 10);
 	bullet->x_vel = 0;
@@ -62,6 +63,15 @@ init(void) {
 	bullet->type = BULLET_ROUND;
 
 	bullet_spawn(bullet);
+
+	bullet_t *bullet2 = bullet_create();
+	bullet2->rect = rect_create(100, 150, 20, 20);
+	bullet2->x_vel = 0;
+	bullet2->y_vel = 0;
+	bullet2->type = BULLET_SQUARE;
+
+	bullet_spawn(bullet2);
+	*/
 }
 
 static void

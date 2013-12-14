@@ -33,8 +33,9 @@ vector_add(vector_t *vec, void *data) {
 
 	// Array is full, need to resize
 	if (vec->size == vec->count) {
-		vec->size += 10;
-		vec->data = (void*)realloc(vec->data, sizeof(void*) * 10);
+		printf("Resizing\n");
+		vec->size *= 2;
+		vec->data = (void*)realloc(vec->data, sizeof(void*) * vec->size);
 	}
 
 	// Set the value and increment the counter
@@ -71,18 +72,23 @@ vector_delete(vector_t *vec, int index) {
 	vec->data[index] = NULL;
 
 	// Create a new array
+	printf("New array\n");
 	void **tmp_data = (void**)malloc(sizeof(vec->data));
 
+	printf("Copy elements\n");
 	// Don't copy over any nulled elements, since they're deleted.
 	for (unsigned i = 0, n = 0; i < vec->count; i++) {
 		if (vec->data[i] != NULL)
 			tmp_data[n++] = vec->data[i];
 	}
 
+	printf("Free old array\n");
 	// Free up the old array
-	free(vec->data);
+//	free(vec->data);
 
 	// Set the new data and decrement the counter
+	printf("Set new array\n");
 	vec->data = tmp_data;
 	vec->count--;
+	printf("Done\n");
 }

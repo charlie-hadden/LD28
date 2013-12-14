@@ -25,6 +25,8 @@ window_init(const char *title, int width, int height) {
 		die("Could not initialize GLEW");
 
 	SDL_GL_SetSwapInterval(-1);
+
+	SDL_SetWindowGrab(window_, SDL_TRUE);
 }
 
 void
