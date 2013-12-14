@@ -45,7 +45,6 @@ bullet_update(unsigned int delta_time) {
 		if (rect_intersecting(player, bullet->rect)) {
 			vector_delete(bullets_, i);
 			bullet_free(bullet);
-			printf("Intersecting\n");
 		}
 	}
 }
@@ -53,13 +52,18 @@ bullet_update(unsigned int delta_time) {
 void
 bullet_draw(void) {
 	glColor3f(0.2f, 0.8f, 0.2f);
-	glPointSize(5.0f);
-	glBegin(GL_POINTS);
+	glBegin(GL_QUADS);
 
 	for (unsigned i = 0; i < vector_count(bullets_); i++) {
 		bullet_t *bullet = vector_get(bullets_, i);
 
-		glVertex2f(bullet->rect->x, bullet->rect->y);
+		float x = bullet->rect->x, y = bullet->rect->y;
+		float half_w = bullet->rect->w / 2, half_h = bullet->rect->h / 2;
+
+		glVertex2f(x - half_w, y - half_h);
+		glVertex2f(x + half_w, y - half_h);
+		glVertex2f(x + half_w, y + half_h);
+		glVertex2f(x - half_w, y + half_h);
 	}
 
 	glEnd();

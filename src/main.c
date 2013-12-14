@@ -56,7 +56,7 @@ init(void) {
 	player_init();
 
 	bullet_t *bullet = bullet_create();
-	bullet->rect = rect_create(50, 50, 1, 1);
+	bullet->rect = rect_create(50, 50, 10, 10);
 	bullet->x_vel = 0;
 	bullet->y_vel = 0.1f;
 	bullet->type = BULLET_ROUND;
