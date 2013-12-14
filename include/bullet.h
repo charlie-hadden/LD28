@@ -5,6 +5,7 @@
 #include "rect.h"
 #include "player.h"
 #include "window.h"
+#include "game.h"
 
 typedef enum {
 	BULLET_ROUND,

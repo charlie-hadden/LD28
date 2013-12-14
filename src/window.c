@@ -26,8 +26,6 @@ window_init(const char *title, int width, int height) {
 	if (glew_status != GLEW_OK)
 		die("Could not initialize GLEW");
 
-	SDL_SetWindowGrab(window_, SDL_TRUE);
-
 	rect_ = rect_create(width / 2, height / 2, width, height);
 
 	glEnable(GL_BLEND);
@@ -50,4 +48,9 @@ window_swap(void) {
 rect_t*
 window_get_rect(void) {
 	return rect_;
+}
+
+void
+window_set_grab(bool grab) {
+	SDL_SetWindowGrab(window_, grab);
 }

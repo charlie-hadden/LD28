@@ -61,6 +61,7 @@ bullet_update(unsigned int delta_time) {
 		if (!bullet->player && rect_intersecting(player, bullet->rect)) {
 			bullets_[i] = NULL;
 			bullet_free(bullet);
+			game_gameover();
 			break;
 		}
 	}

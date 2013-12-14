@@ -15,15 +15,11 @@ player_init(void) {
 	size_ = 50;
 
 	rect_ = rect_create(0, 0, 0, 0);
-
-	SDL_ShowCursor(0);
 }
 
 void
 player_cleanup(void) {
 	free(rect_);
-
-	SDL_ShowCursor(1);
 }
 
 void

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "menu.h"
 #include "game.h"
+#include "gameover.h"
 
 typedef struct {
 	void (*init)(void);
@@ -13,11 +14,12 @@ typedef struct {
 	void (*draw)(void);
 } state_t;
 
-#define NUM_STATES 2
+#define NUM_STATES 3
 typedef enum {
 	STATE_NONE = -1,
 	STATE_MENU = 0,
-	STATE_GAME = 1
+	STATE_GAME = 1,
+	STATE_GAMEOVER = 2
 } states;
 
 void states_init(void);

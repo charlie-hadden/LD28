@@ -20,6 +20,13 @@ states_init(void) {
 	states_[1].update = &game_update;
 	states_[1].draw = &game_draw;
 
+	// Game Over State
+	states_[2].init = &gameover_init;
+	states_[2].cleanup = &gameover_cleanup;
+	states_[2].handle_event = &gameover_handle_event;
+	states_[2].update = &gameover_update;
+	states_[2].draw = &gameover_draw;
+
 	states_set_state(0);
 	next_state_ = STATE_NONE;
 }

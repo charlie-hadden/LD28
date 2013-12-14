@@ -10,8 +10,6 @@
 #include <GL/glew.h>
 #include <linmath.h>
 
-#include "color.h"
-
 void die(const char *msg);
 
 #endif // COMMON_H

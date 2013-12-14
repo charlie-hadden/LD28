@@ -1,15 +1,19 @@
 #include "game.h"
 
+static bool game_over_ = false;
+
 void
 game_init(void) {
 	bullet_init();
 	player_init();
+	window_set_grab(true);
 }
 
 void
 game_cleanup(void) {
 	bullet_cleanup();
 	player_cleanup();
+	window_set_grab(false);
 }
 
 void
@@ -41,12 +45,23 @@ game_update(unsigned int delta_time) {
 		angle += 0.2;
 	}
 
-	player_update(delta_time);
-	bullet_update(delta_time);
+	SDL_ShowCursor(game_over_);
+	if (game_over_)
+		states_queue_change(STATE_GAMEOVER);
+
+	if (!game_over_) {
+		player_update(delta_time);
+		bullet_update(delta_time);
+	}
 }
 
 void
 game_draw(void) {
 	bullet_draw();
 	player_draw();
+}
+
+void
+game_gameover(void) {
+	game_over_ = true;
 }
