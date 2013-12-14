@@ -4,6 +4,7 @@ static bool game_over_ = false;
 
 void
 game_init(void) {
+	game_over_ = false;
 	bullet_init();
 	player_init();
 	window_set_grab(true);
@@ -47,7 +48,7 @@ game_update(unsigned int delta_time) {
 
 	SDL_ShowCursor(game_over_);
 	if (game_over_)
-		states_queue_change(STATE_GAMEOVER);
+		states_queue_change(STATE_MENU);
 
 	if (!game_over_) {
 		player_update(delta_time);

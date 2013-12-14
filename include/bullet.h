@@ -31,4 +31,6 @@ void bullet_spawn(bullet_t *bullet);
 void bullet_update(unsigned int delta_time);
 void bullet_draw(void);
 
+void bullet_check_collisions(rect_t *rect);
+
 #endif // BULLET_H

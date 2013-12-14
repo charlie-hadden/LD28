@@ -68,11 +68,18 @@ player_update(unsigned int delta_time) {
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
 		vec3_scale(vel, vel, 0.6);
 
+	float dist_x = vel[0];
+	float dist_y = vel[1];
+	float dist = sqrt(dist_x * dist_x + dist_y * dist_y);
+
 	x_ += vel[0];
 	y_ += vel[1];
 
-	float dist = sqrt((mouse_x - x_) * (mouse_x - x_) + (mouse_y - y_) * (mouse_y - y_));
-	if (!using_keyboard_ && dist < 2) {
+	rect_t *rect = player_get_rect();
+	bullet_check_collisions(rect);
+
+	float mouse_dist = sqrt((mouse_x - x_) * (mouse_x - x_) + (mouse_y - y_) * (mouse_y - y_));
+	if (!using_keyboard_ && mouse_dist < 2) {
 		x_ = mouse_x;
 		y_ = mouse_y;
 	}

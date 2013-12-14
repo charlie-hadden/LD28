@@ -47,6 +47,7 @@ states_update(void) {
 
 void
 states_set_state(states state) {
+	printf("Changing to state: %i\n", state);
 	if (current_state_ && current_state_->cleanup)
 		current_state_->cleanup();
 

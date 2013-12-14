@@ -19,7 +19,7 @@ menu_init(void) {
 		fprintf(stderr, "SDL_ttf error: %s\n", TTF_GetError());
 
 	buttons_[0].text = menu_draw_text("Play", &buttons_[0].w, &buttons_[0].h);
-	buttons_[0].rect = rect_create(140, 40, 200, 50);
+	buttons_[0].rect = rect_create(window_width() / 2, window_height() - 75, 200, 50);
 	buttons_[0].click = &menu_click_play;
 }
 
