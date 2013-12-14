@@ -2,6 +2,9 @@
 
 static bullet_t *bullets_[MAX_BULLETS];
 
+static void bullet_draw_square(void);
+static void bullet_draw_round(void);
+
 void
 bullet_init(void) {
 }
@@ -65,29 +68,24 @@ bullet_update(unsigned int delta_time) {
 			game_gameover();
 			break;
 		}
-
-		/*
-		bullet->rect->x += bullet->x_vel * delta_time;
-		bullet->rect->y += bullet->y_vel * delta_time;
-
-		if (!bullet->player && rect_intersecting(player, bullet->rect)) {
-			bullets_[i] = NULL;
-			bullet_free(bullet);
-			game_gameover();
-			break;
-		}
-		*/
 	}
 }
 
 void
 bullet_draw(void) {
-	glColor3f(0.2f, 0.8f, 0.2f);
+	bullet_draw_square();
+	bullet_draw_round();
+}
+
+static void
+bullet_draw_square(void) {
+	glColor3f(0.8f, 0.2f, 0.2f);
 	glBegin(GL_QUADS);
 
 	for (unsigned i = 0; i < MAX_BULLETS; i++) {
 		bullet_t *bullet = bullets_[i];
-		if (bullet == NULL)
+
+		if (!bullet || bullet->type != BULLET_SQUARE)
 			continue;
 
 		float x = bullet->rect->x, y = bullet->rect->y;
@@ -100,6 +98,26 @@ bullet_draw(void) {
 	}
 
 	glEnd();
+}
+
+static void
+bullet_draw_round(void) {
+	glColor3f(0.6f, 0.1f, 0.1f);
+	glEnable(GL_POINT_SMOOTH);
+	glBegin(GL_POINTS);
+
+	for (unsigned i = 0; i < MAX_BULLETS; i++) {
+		bullet_t *bullet = bullets_[i];
+
+		if (!bullet || bullet->type != BULLET_ROUND)
+			continue;
+
+		glPointSize((bullet->rect->w + bullet->rect->h) / 2);
+		glVertex2f(bullet->rect->x, bullet->rect->y);
+	}
+
+	glEnd();
+	glDisable(GL_POINT_SMOOTH);
 }
 
 void

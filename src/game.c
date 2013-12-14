@@ -39,7 +39,7 @@ game_update(unsigned int delta_time) {
 		bullet->rect = rect_create(300, 100, 10, 10);
 		bullet->x_vel = -sin(angle) * 0.2;
 		bullet->y_vel = -cos(angle) * 0.5;
-		bullet->type = BULLET_SQUARE;
+		bullet->type = BULLET_ROUND;
 		bullet_spawn(bullet);
 
 		fire_cooldown = fire_interval;
