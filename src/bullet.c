@@ -43,6 +43,8 @@ bullet_update(unsigned int delta_time) {
 		bullet->rect->y += bullet->y_vel * delta_time;
 
 		if (rect_intersecting(player, bullet->rect)) {
+			vector_delete(bullets_, i);
+			bullet_free(bullet);
 			printf("Intersecting\n");
 		}
 	}
