@@ -55,32 +55,14 @@ bullet_update(unsigned int delta_time) {
 			continue;
 		}
 
-		// We can kind of cheat here and use a collision rectangle that fits
-		// both the start and the destination to stop clipping through.
-		float x = bullet->rect->x, y = bullet->rect->y;
-		int w = bullet->rect->w, h = bullet->rect->h;
-
-		float dist_x = bullet->x_vel * delta_time;
-		float dist_y = bullet->y_vel * delta_time;
-
-		// Set up the rectangle to check for the collision
-		bullet->rect->x += dist_x;
-		bullet->rect->y += dist_y;
-		bullet->rect->w = sqrt(w*w + h*h);
-		bullet->rect->h = sqrt(w*w + h*h);
-
+		bullet->rect->x += bullet->x_vel * delta_time;
+		bullet->rect->y += bullet->y_vel * delta_time;
 
 		if (!bullet->player && rect_intersecting(player, bullet->rect)) {
 			bullets_[i] = NULL;
 			bullet_free(bullet);
 			break;
 		}
-
-		// Now we can reset the rectangle
-		bullet->rect->x = x + dist_x;
-		bullet->rect->y = y + dist_y;
-		bullet->rect->w = w;
-		bullet->rect->h = h;
 	}
 }
 
