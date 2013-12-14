@@ -1,6 +1,7 @@
 #include "common.h"
 #include "window.h"
 #include "player.h"
+#include "bullet.h"
 
 static void init(void);
 static void cleanup(void);
@@ -50,12 +51,25 @@ init(void) {
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
 
+	bullet_init();
 	player_init();
+
+	bullet_t *bullet = bullet_create();
+	bullet->x_pos = 50;
+	bullet->y_pos = 50;
+	bullet->x_vel = 0;
+	bullet->y_vel = 0.1f;
+	bullet->type = BULLET_ROUND;
+	bullet->scale_x = 1;
+	bullet->scale_y = 1;
+
+	bullet_spawn(bullet);
 }
 
 static void
 cleanup(void) {
 	window_cleanup();
+	bullet_cleanup();
 	player_cleanup();
 }
 
@@ -74,6 +88,7 @@ draw(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	player_draw();
+	bullet_draw();
 
 	window_swap();
 }
