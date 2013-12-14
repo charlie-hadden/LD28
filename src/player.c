@@ -4,6 +4,9 @@ static float x_ = 0, y_ = 0;
 static int size_ = 0;
 static rect_t *rect_;
 
+static bool using_keyboard_ = true;
+static int last_mouse_x_, last_mouse_y_;
+
 static int fire_time = 100, fire_cooldown = 0;
 
 static void fire(void);
@@ -28,6 +31,11 @@ player_update(unsigned int delta_time) {
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 	const uint8_t *state = SDL_GetKeyboardState(NULL);
 
+	if (!last_mouse_x_ && !last_mouse_y_) {
+		last_mouse_x_ = mouse_x;
+		last_mouse_y_ = mouse_y;
+	}
+
 	vec3 vel = { 0, 0, 0 };
 
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP])
@@ -43,8 +51,13 @@ player_update(unsigned int delta_time) {
 		vel[0] += 1;
 
 	if (vec3_len(vel)) {
+		using_keyboard_ = true;
 		vec3_norm(vel, vel);
-	} else if (mouse_x != x_ || mouse_y != y_) {
+	} else if ((mouse_x != x_ || mouse_y != y_)
+			&& (mouse_x != last_mouse_x_ || mouse_y != last_mouse_y_ || !using_keyboard_)) {
+		using_keyboard_ = false;
+		last_mouse_x_ = mouse_x;
+		last_mouse_y_ = mouse_y;
 		vel[0] = mouse_x - x_;
 		vel[1] = mouse_y - y_;
 		vec3_norm(vel, vel);
@@ -59,7 +72,7 @@ player_update(unsigned int delta_time) {
 	y_ += vel[1];
 
 	float dist = sqrt((mouse_x - x_) * (mouse_x - x_) + (mouse_y - y_) * (mouse_y - y_));
-	if (dist < 2) {
+	if (!using_keyboard_ && dist < 2) {
 		x_ = mouse_x;
 		y_ = mouse_y;
 	}
@@ -86,15 +99,17 @@ player_update(unsigned int delta_time) {
 void
 player_draw(void) {
 	// Draw the cursor
-	int mouse_x, mouse_y;
-	SDL_GetMouseState(&mouse_x, &mouse_y);
-	glEnable(GL_POINT_SMOOTH);
-	glPointSize(10);
-	glColor3f(0.1, 0.7, 0.1);
-	glBegin(GL_POINTS);
-	glVertex2f(mouse_x, mouse_y);
-	glEnd();
-	glDisable(GL_POINT_SMOOTH);
+	if (!using_keyboard_) {
+		int mouse_x, mouse_y;
+		SDL_GetMouseState(&mouse_x, &mouse_y);
+		glEnable(GL_POINT_SMOOTH);
+		glPointSize(10);
+		glColor3f(0.1, 0.7, 0.1);
+		glBegin(GL_POINTS);
+		glVertex2f(mouse_x, mouse_y);
+		glEnd();
+		glDisable(GL_POINT_SMOOTH);
+	}
 
 	// Draw the player
 	glColor3f(0.8f, 0.2f, 0.2f);
