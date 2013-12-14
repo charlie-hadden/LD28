@@ -31,9 +31,6 @@ player_update(unsigned int delta_time) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 
-//	x_ = mouse_x;
-//	y_ = mouse_y;
-
 	vec3 vel = { mouse_x - x_, mouse_y - y_, 0 };
 	if (vec3_len(vel)) {
 		vec3_norm(vel, vel);
