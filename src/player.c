@@ -2,16 +2,20 @@
 
 static float x_ = 0, y_ = 0;
 static int size_ = 0;
+static rect_t *rect_;
 
 void
 player_init(void) {
 	x_ = 300;
 	y_ = 600;
 	size_ = 50;
+
+	rect_ = rect_create(0, 0, 0, 0);
 }
 
 void
 player_cleanup(void) {
+	free(rect_);
 }
 
 void
@@ -39,4 +43,14 @@ player_draw(void) {
 
 	glEnd();
 	glPopMatrix();
+}
+
+rect_t*
+player_get_rect(void) {
+	rect_->x = x_;
+	rect_->y = y_;
+	rect_->w = size_;
+	rect_->h = size_;
+
+	return rect_;
 }

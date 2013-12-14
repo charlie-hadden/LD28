@@ -3,16 +3,18 @@
 
 #include "common.h"
 #include "vector.h"
+#include "rect.h"
+#include "player.h"
 
 typedef enum {
-	BULLET_ROUND
+	BULLET_ROUND,
+	BULLET_SQUARE
 } bullet_type;
 
 typedef struct {
-	float x_pos, y_pos;
+	rect_t *rect;
 	float x_vel, y_vel;
 	bullet_type type;
-	float scale_x, scale_y;
 } bullet_t;
 
 void bullet_init(void);
@@ -22,6 +24,7 @@ bullet_t *bullet_create(void);
 void bullet_free(bullet_t *bullet);
 
 void bullet_spawn(bullet_t *bullet);
+void bullet_update(unsigned int delta_time);
 void bullet_draw(void);
 
 #endif // BULLET_H

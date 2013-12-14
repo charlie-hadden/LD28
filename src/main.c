@@ -2,6 +2,7 @@
 #include "window.h"
 #include "player.h"
 #include "bullet.h"
+#include "rect.h"
 
 static void init(void);
 static void cleanup(void);
@@ -55,13 +56,10 @@ init(void) {
 	player_init();
 
 	bullet_t *bullet = bullet_create();
-	bullet->x_pos = 50;
-	bullet->y_pos = 50;
+	bullet->rect = rect_create(50, 50, 1, 1);
 	bullet->x_vel = 0;
 	bullet->y_vel = 0.1f;
 	bullet->type = BULLET_ROUND;
-	bullet->scale_x = 1;
-	bullet->scale_y = 1;
 
 	bullet_spawn(bullet);
 }
@@ -80,6 +78,7 @@ handle_event(SDL_Event *event) {
 static void
 update(unsigned int delta_time) {
 	player_update(delta_time);
+	bullet_update(delta_time);
 }
 
 static void
