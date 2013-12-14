@@ -13,6 +13,7 @@ typedef enum {
 typedef struct {
 	rect_t *rect;
 	float x_vel, y_vel;
+	bool player;
 	bullet_type type;
 } bullet_t;
 

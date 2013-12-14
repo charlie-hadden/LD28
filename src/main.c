@@ -54,24 +54,6 @@ init(void) {
 
 	bullet_init();
 	player_init();
-
-	/*
-	bullet_t *bullet = bullet_create();
-	bullet->rect = rect_create(50, 50, 10, 10);
-	bullet->x_vel = 0;
-	bullet->y_vel = 0.1f;
-	bullet->type = BULLET_ROUND;
-
-	bullet_spawn(bullet);
-
-	bullet_t *bullet2 = bullet_create();
-	bullet2->rect = rect_create(100, 150, 20, 20);
-	bullet2->x_vel = 0;
-	bullet2->y_vel = 0;
-	bullet2->type = BULLET_SQUARE;
-
-	bullet_spawn(bullet2);
-	*/
 }
 
 static void
@@ -96,8 +78,8 @@ draw(void) {
 	glClearColor(0.2f, 0.2f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	player_draw();
 	bullet_draw();
+	player_draw();
 
 	window_swap();
 }

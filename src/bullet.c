@@ -51,7 +51,7 @@ bullet_update(unsigned int delta_time) {
 		bullet->rect->x += bullet->x_vel * delta_time;
 		bullet->rect->y += bullet->y_vel * delta_time;
 
-		if (rect_intersecting(player, bullet->rect)) {
+		if (!bullet->player && rect_intersecting(player, bullet->rect)) {
 			bullets_[i] = NULL;
 			bullet_free(bullet);
 		}
