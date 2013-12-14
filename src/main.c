@@ -50,6 +50,7 @@ init(void) {
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
 
+	color_init();
 	states_init();
 }
 
@@ -69,6 +70,7 @@ handle_event(SDL_Event *event) {
 static void
 update(unsigned int delta_time) {
 	states_update();
+	color_update(delta_time);
 
 	state_t *state = states_get_state();
 	if (state->update)
