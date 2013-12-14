@@ -1,6 +1,7 @@
 #include "states.h"
 
 static state_t states_[NUM_STATES];
+static states next_state_;
 static state_t *current_state_;
 
 void
@@ -20,12 +21,21 @@ states_init(void) {
 	states_[1].draw = &game_draw;
 
 	states_set_state(0);
+	next_state_ = STATE_NONE;
 }
 
 void
 states_cleanup(void) {
 	if (current_state_ && current_state_->cleanup)
 		current_state_->cleanup();
+}
+
+void
+states_update(void) {
+	if (next_state_ != STATE_NONE) {
+		states_set_state(next_state_);
+		next_state_ = STATE_NONE;
+	}
 }
 
 void
@@ -37,6 +47,11 @@ states_set_state(states state) {
 
 	if (current_state_->init)
 		current_state_->init();
+}
+
+void
+states_queue_change(states state) {
+	next_state_ = state;
 }
 
 state_t*

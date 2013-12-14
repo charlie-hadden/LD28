@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include "common.h"
+#include "states.h"
 #include "window.h"
 #include "rect.h"
 
@@ -9,6 +10,7 @@ typedef struct {
 	GLuint text;
 	int w, h;
 	rect_t *rect;
+	void (*click)(void);
 } menu_button_t;
 
 void menu_init(void);

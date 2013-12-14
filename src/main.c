@@ -68,6 +68,8 @@ handle_event(SDL_Event *event) {
 
 static void
 update(unsigned int delta_time) {
+	states_update();
+
 	state_t *state = states_get_state();
 	if (state->update)
 		state->update(delta_time);

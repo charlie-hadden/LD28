@@ -15,6 +15,7 @@ typedef struct {
 
 #define NUM_STATES 2
 typedef enum {
+	STATE_NONE = -1,
 	STATE_MENU = 0,
 	STATE_GAME = 1
 } states;
@@ -22,7 +23,10 @@ typedef enum {
 void states_init(void);
 void states_cleanup(void);
 
+void states_update(void);
+
 void states_set_state(states state);
+void states_queue_change(states state);
 state_t *states_get_state(void);
 
 #endif // STATES_H

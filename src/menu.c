@@ -7,6 +7,8 @@ static menu_button_t buttons_[NUM_MENU_BUTTONS];
 
 static GLuint menu_draw_text(const char *text, int *w, int *h);
 
+static void menu_click_play(void);
+
 void
 menu_init(void) {
 	if (TTF_Init() == -1)
@@ -16,8 +18,9 @@ menu_init(void) {
 	if (!font_)
 		fprintf(stderr, "SDL_ttf error: %s\n", TTF_GetError());
 
-	buttons_[0].text = menu_draw_text("Test", &buttons_[0].w, &buttons_[0].h);
+	buttons_[0].text = menu_draw_text("Play", &buttons_[0].w, &buttons_[0].h);
 	buttons_[0].rect = rect_create(140, 40, 200, 50);
+	buttons_[0].click = &menu_click_play;
 }
 
 void
@@ -34,6 +37,16 @@ menu_cleanup(void) {
 
 void
 menu_handle_event(SDL_Event *event) {
+	if (event->type == SDL_MOUSEBUTTONDOWN
+			&& event->button.button == SDL_BUTTON_LEFT) {
+		for (int i = 0; i < NUM_MENU_BUTTONS; i++) {
+			if (rect_contains_point(buttons_[i].rect, event->button.x,
+						event->button.y)
+					&& buttons_[i].click) {
+				buttons_[i].click();
+			}
+		}
+	}
 }
 
 void
@@ -119,4 +132,9 @@ menu_draw_text(const char *text, int *w, int *h) {
 	SDL_FreeSurface(surface);
 
 	return texture;
+}
+
+static void
+menu_click_play(void) {
+	states_queue_change(STATE_GAME);
 }
