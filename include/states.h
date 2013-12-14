@@ -2,6 +2,7 @@
 #define STATES_H
 
 #include "common.h"
+#include "menu.h"
 #include "game.h"
 
 typedef struct {
@@ -12,9 +13,10 @@ typedef struct {
 	void (*draw)(void);
 } state_t;
 
-#define NUM_STATES 1
+#define NUM_STATES 2
 typedef enum {
-	STATE_GAME = 0
+	STATE_MENU = 0,
+	STATE_GAME = 1
 } states;
 
 void states_init(void);

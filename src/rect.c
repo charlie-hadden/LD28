@@ -24,3 +24,11 @@ rect_intersecting(rect_t *a, rect_t *b) {
 			|| a->y - a->h / 2 > b->y + b->h / 2
 			|| a->y + a->h / 2 < b->y - b->w / 2);
 }
+
+bool
+rect_contains_point(rect_t *rect, float x, float y) {
+	return (x < rect->x + rect->w / 2
+			&& x > rect->x - rect->w / 2
+			&& y < rect->y + rect->h / 2
+			&& y > rect->y - rect->h / 2);
+}

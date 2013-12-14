@@ -5,12 +5,19 @@ static state_t *current_state_;
 
 void
 states_init(void) {
+	// Menu State
+	states_[0].init = &menu_init;
+	states_[0].cleanup = &menu_cleanup;
+	states_[0].handle_event = &menu_handle_event;
+	states_[0].update = &menu_update;
+	states_[0].draw = &menu_draw;
+
 	// Game State
-	states_[0].init = &game_init;
-	states_[0].cleanup = &game_cleanup;
-	states_[0].handle_event = &game_handle_event;
-	states_[0].update = &game_update;
-	states_[0].draw = &game_draw;
+	states_[1].init = &game_init;
+	states_[1].cleanup = &game_cleanup;
+	states_[1].handle_event = &game_handle_event;
+	states_[1].update = &game_update;
+	states_[1].draw = &game_draw;
 
 	states_set_state(0);
 }
