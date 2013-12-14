@@ -1,8 +1,6 @@
 #include "common.h"
 #include "window.h"
-#include "player.h"
-#include "bullet.h"
-#include "rect.h"
+#include "states.h"
 
 static void init(void);
 static void cleanup(void);
@@ -52,25 +50,27 @@ init(void) {
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
 
-	bullet_init();
-	player_init();
+	states_init();
 }
 
 static void
 cleanup(void) {
+	states_cleanup();
 	window_cleanup();
-	bullet_cleanup();
-	player_cleanup();
 }
 
 static void
 handle_event(SDL_Event *event) {
+	state_t *state = states_get_state();
+	if (state->handle_event)
+		state->handle_event(event);
 }
 
 static void
 update(unsigned int delta_time) {
-	player_update(delta_time);
-	bullet_update(delta_time);
+	state_t *state = states_get_state();
+	if (state->update)
+		state->update(delta_time);
 }
 
 static void
@@ -78,8 +78,9 @@ draw(void) {
 	glClearColor(0.2f, 0.2f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	bullet_draw();
-	player_draw();
+	state_t *state = states_get_state();
+	if (state->draw)
+		state->draw();
 
 	window_swap();
 }
