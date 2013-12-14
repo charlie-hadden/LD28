@@ -42,11 +42,18 @@ bullet_spawn(bullet_t *bullet) {
 void
 bullet_update(unsigned int delta_time) {
 	rect_t *player = player_get_rect();
+	rect_t *window = window_get_rect();
 
 	for (unsigned i = 0; i < MAX_BULLETS; i++) {
 		bullet_t *bullet = bullets_[i];
 		if (bullet == NULL)
 			continue;
+
+		if (!rect_intersecting(window, bullet->rect)) {
+			bullets_[i] = NULL;
+			bullet_free(bullet);
+			continue;
+		}
 
 		bullet->rect->x += bullet->x_vel * delta_time;
 		bullet->rect->y += bullet->y_vel * delta_time;

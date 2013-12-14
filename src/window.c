@@ -3,6 +3,8 @@
 static SDL_Window *window_;
 static SDL_GLContext context_;
 
+static rect_t *rect_;
+
 void
 window_init(const char *title, int width, int height) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -26,12 +28,15 @@ window_init(const char *title, int width, int height) {
 
 	SDL_SetWindowGrab(window_, SDL_TRUE);
 
+	rect_ = rect_create(width / 2, height / 2, width, height);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void
 window_cleanup(void) {
+	rect_free(rect_);
 	SDL_GL_DeleteContext(context_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
@@ -42,7 +47,7 @@ window_swap(void) {
 	SDL_GL_SwapWindow(window_);
 }
 
-SDL_Renderer*
-window_get_renderer(void) {
-	return SDL_GetRenderer(window_);
+rect_t*
+window_get_rect(void) {
+	return rect_;
 }

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "rect.h"
 #include "player.h"
+#include "window.h"
 
 typedef enum {
 	BULLET_ROUND,

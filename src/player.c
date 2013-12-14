@@ -4,7 +4,7 @@ static float x_ = 0, y_ = 0;
 static int size_ = 0;
 static rect_t *rect_;
 
-static int fire_time = 20, fire_cooldown = 0;
+static int fire_time = 2, fire_cooldown = 0;
 
 static void fire(void);
 
@@ -70,7 +70,7 @@ fire(void) {
 	bullet_t *bullet = bullet_create();
 	bullet->rect = rect_create(x_, y_ - size_ / 2, 10, 10);
 	bullet->x_vel = 0;
-	bullet->y_vel = -0.2f;
+	bullet->y_vel = -0.4f;
 	bullet->player = true;
 	bullet->type = BULLET_SQUARE;
 
