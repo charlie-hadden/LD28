@@ -3,8 +3,8 @@
 #define NUM_MENU_BUTTONS 4
 static menu_button_t buttons_[NUM_MENU_BUTTONS];
 
-static GLuint super_, pewpew_;
-static int super_h_, super_w_, pewpew_h_, pewpew_w_;
+static GLuint super_, pewpew_, ld_;
+static int super_h_, super_w_, pewpew_h_, pewpew_w_, ld_w_, ld_h_;
 
 static void menu_click_easy(void);
 static void menu_click_normal(void);
@@ -15,6 +15,7 @@ void
 menu_init(void) {
 	super_ = text_write_big("SUPER", &super_w_, &super_h_);
 	pewpew_ = text_write_big("PEW-PEW", &pewpew_w_, &pewpew_h_);
+	ld_ = text_write("LD28", &ld_w_, &ld_h_);
 
 	buttons_[0].text = text_write("EASY", &buttons_[0].w, &buttons_[0].h);
 	buttons_[0].rect = rect_create(window_width() / 2, 375, 300, 50);
@@ -31,13 +32,13 @@ menu_init(void) {
 	buttons_[3].text = text_write("NOPE", &buttons_[3].w, &buttons_[3].h);
 	buttons_[3].rect = rect_create(window_width() / 2, 675, 300, 50);
 	buttons_[3].click = &menu_click_nope;
-
 }
 
 void
 menu_cleanup(void) {
 	glDeleteTextures(1, &super_);
 	glDeleteTextures(1, &pewpew_);
+	glDeleteTextures(1, &ld_);
 
 	for (unsigned i = 0; i < NUM_MENU_BUTTONS; i++) {
 		glDeleteTextures(1, &buttons_[i].text);
@@ -108,6 +109,23 @@ menu_draw(void) {
 	glVertex2f(off_x + pewpew_w_ / 2, off_y + pewpew_h_ / 2);
 	glTexCoord2f(0, 1);
 	glVertex2f(off_x - pewpew_w_ / 2, off_y + pewpew_h_ / 2);
+
+	glEnd();
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, ld_);
+	glBegin(GL_QUADS);
+
+	off_x = window_width() - 70, off_y = window_height() - 20;
+
+	glTexCoord2f(0, 0);
+	glVertex2f(off_x - ld_w_ / 2, off_y - ld_h_ / 2);
+	glTexCoord2f(1, 0);
+	glVertex2f(off_x + ld_w_ / 2, off_y - ld_h_ / 2);
+	glTexCoord2f(1, 1);
+	glVertex2f(off_x + ld_w_ / 2, off_y + ld_h_ / 2);
+	glTexCoord2f(0, 1);
+	glVertex2f(off_x - ld_w_ / 2, off_y + ld_h_ / 2);
 
 	glEnd();
 
