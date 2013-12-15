@@ -27,6 +27,9 @@ text_init(const char *font_path, int big_size, int main_size) {
 
 	TTF_SetFontHinting(big_, TTF_HINTING_NONE);
 	TTF_SetFontHinting(main_, TTF_HINTING_NONE);
+
+	TTF_SetFontKerning(big_, false);
+	TTF_SetFontKerning(main_, false);
 }
 
 void
@@ -51,6 +54,25 @@ text_write(const char *text, int *w, int *h) {
 		return 0;
 
 	return text_actually_write(text, w, h, main_);
+}
+
+void
+text_rewrite(GLuint texture, const char *text, int *w, int *h) {
+	SDL_Color color = { 255, 255, 255 };
+	SDL_Surface *surface = TTF_RenderText_Blended(main_, text, color);
+	if (!surface)
+		fprintf(stderr, "Could not reprint text\n");
+
+	*w = surface->w;
+	*h = surface->h;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, surface->pixels);
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 static GLuint

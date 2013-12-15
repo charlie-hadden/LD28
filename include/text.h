@@ -8,5 +8,6 @@ void text_cleanup();
 
 GLuint text_write_big(const char *text, int *w, int *h);
 GLuint text_write(const char *text, int *w, int *h);
+void text_rewrite(GLuint texture, const char *text, int *w, int *h);
 
 #endif // TEXT_H
