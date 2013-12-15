@@ -87,8 +87,8 @@ player_update(void) {
 	if (x_ + size_ / 2 >= window_width())
 		x_ = window_width() - size_ / 2;
 
-	if (y_ - size_ / 2 < 0)
-		y_ = size_ / 2;
+	if (y_ - size_ / 2 < 200)
+		y_ = size_ / 2 + 200;
 
 	if (y_ + size_ / 2 >= window_height())
 		y_ = window_height() - size_ / 2;

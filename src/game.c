@@ -64,6 +64,8 @@ game_update(void) {
 		text_rewrite(score_text_, score, &score_w_, &score_h_);
 	}
 
+	difficulty_ += 0.00001f;
+
 	if (!game_over_) {
 		color_update();
 		bullet_update();

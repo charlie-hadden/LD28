@@ -7,13 +7,16 @@ static int target_enemies_;
 static int spawn_rate_, spawn_cooldown_;
 
 static void enemy_update_strafer(enemy_t *enemy);
+static void enemy_update_spiral(enemy_t *enemy);
+
 static void enemy_bullets_strafer(enemy_t *enemy);
+static void enemy_bullets_spiral(enemy_t *enemy);
 
 void
 enemy_init(void) {
 	target_enemies_ = 2;
-	spawn_rate_ = 500;
-	spawn_cooldown_ = 100;
+	spawn_rate_ = 300;
+	spawn_cooldown_ = 200;
 }
 
 void
@@ -60,9 +63,16 @@ enemy_check_bullet(rect_t *bullet, vec3 vel) {
 			continue;
 
 		if (rect_collides(enemy->rect, bullet, vel)) {
-			enemy_free(enemy);
-			enemies_[i] = NULL;
-			count_--;
+			enemy->hp--;
+
+			if (enemy->hp == 0) {
+				enemy_free(enemy);
+				enemies_[i] = NULL;
+				count_--;
+
+				if (!count_ && spawn_cooldown_ <= 0)
+					spawn_cooldown_ = spawn_rate_;
+			}
 		}
 	}
 }
@@ -96,10 +106,13 @@ enemy_update(void) {
 		float size = 40;
 
 		enemy_t *enemy = enemy_create();
-		enemy->rect = rect_create(x, y, size, size);
+		enemy->rect = rect_create((rand() % window_width() - 80) + 40, (rand() % 150) + 40, size, size);
 		enemy->last_x_vel = 1.5f * game_get_difficulty();
+		int rnd = (rand() % 2) - 1;
+		enemy->last_x_vel *= (rnd >= 0) ? 1 : -1;
 		enemy->last_y_vel = 1.5f * game_get_difficulty();
-		enemy->type = ENEMY_STRAFER;
+		enemy->type = rand() % 2;//ENEMY_STRAFER;
+		enemy->hp = 5 * game_get_difficulty();
 		enemy->angle = 0;
 		enemy->cooldown = rand() % 70;
 		enemy->fire_rate = 100 + (rand() % 30 / 2);
@@ -121,6 +134,16 @@ enemy_update(void) {
 					enemy_bullets_strafer(enemy);
 				}
 				break;
+
+			case ENEMY_SPIRAL:
+				enemy_update_spiral(enemy);
+
+				enemy->cooldown--;
+				if (enemy->cooldown <= 0) {
+					enemy->cooldown = enemy->fire_rate;
+					enemy_bullets_spiral(enemy);
+				}
+				break;
 		}
 	}
 }
@@ -128,6 +151,7 @@ enemy_update(void) {
 static void
 enemy_update_strafer(enemy_t *enemy) {
 	enemy->rect->x += enemy->last_x_vel;
+	//enemy->angle += 0.1 * game_get_difficulty();
 
 	if (enemy->rect->x < enemy->rect->w / 2 + 10) {
 		enemy->rect->x = enemy->rect->w / 2 + 10;
@@ -144,8 +168,33 @@ static void
 enemy_bullets_strafer(enemy_t *enemy) {
 	bullet_t *bullet = bullet_create();
 	bullet->rect = rect_create(enemy->rect->x, enemy->rect->y + enemy->rect->h / 2, 20, 20);
-	bullet->x_vel = 0.0f;
-	bullet->y_vel = 2.0f;
+	bullet->x_vel = 0.0f;//cos(enemy->angle);
+	bullet->y_vel = 1.6f;//sin(enemy->angle);
+	bullet->type = BULLET_SQUARE;
+	bullet->player = false;
+	bullet_spawn(bullet);
+}
+
+static void
+enemy_update_spiral(enemy_t *enemy) {
+	enemy->fire_rate = 50;
+	enemy->angle += 0.01 * enemy->last_x_vel;
+}
+
+static void
+enemy_bullets_spiral(enemy_t *enemy) {
+	bullet_t *bullet = bullet_create();
+	bullet->rect = rect_create(enemy->rect->x, enemy->rect->y, 20, 20);
+	bullet->x_vel = cos(enemy->angle) * 2;
+	bullet->y_vel = sin(enemy->angle) * 2;
+	bullet->type = BULLET_SQUARE;
+	bullet->player = false;
+	bullet_spawn(bullet);
+
+	bullet = bullet_create();
+	bullet->rect = rect_create(enemy->rect->x, enemy->rect->y, 20, 20);
+	bullet->x_vel = -cos(enemy->angle) * 2;
+	bullet->y_vel = -sin(enemy->angle) * 2;
 	bullet->type = BULLET_SQUARE;
 	bullet->player = false;
 	bullet_spawn(bullet);

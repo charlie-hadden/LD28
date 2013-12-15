@@ -6,7 +6,8 @@
 #include "rect.h"
 
 typedef enum {
-	ENEMY_STRAFER
+	ENEMY_STRAFER,
+	ENEMY_SPIRAL
 } enemy_type;
 
 typedef struct {
@@ -14,6 +15,7 @@ typedef struct {
 	float last_x_vel, last_y_vel;
 	enemy_type type;
 	float angle;
+	int hp;
 	int cooldown, fire_rate;
 } enemy_t;
 
