@@ -7,7 +7,7 @@ static rect_t *rect_;
 static bool using_keyboard_ = true;
 static int last_mouse_x_, last_mouse_y_;
 
-static int fire_time = 100, fire_cooldown = 0;
+static int fire_time = 30, fire_cooldown = 0;
 
 static void fire(void);
 
@@ -63,7 +63,7 @@ player_update(void) {
 		vec3_norm(vel, vel);
 	}
 
-	vec3_scale(vel, vel, 3.4);
+	vec3_scale(vel, vel, 1.8);
 
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
 		vec3_scale(vel, vel, 0.6);
@@ -101,13 +101,15 @@ player_update(void) {
 
 void
 player_draw(void) {
+	SDL_Color color = color_get(COLOR_PLAYER);
+	glColor3f(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f);
+
 	// Draw the cursor
 	if (!using_keyboard_) {
 		int mouse_x, mouse_y;
 		SDL_GetMouseState(&mouse_x, &mouse_y);
 		glEnable(GL_POINT_SMOOTH);
 		glPointSize(10);
-		glColor3f(0.1, 0.7, 0.1);
 		glBegin(GL_POINTS);
 		glVertex2f(mouse_x, mouse_y);
 		glEnd();
@@ -115,7 +117,6 @@ player_draw(void) {
 	}
 
 	// Draw the player
-	glColor3f(0.8f, 0.2f, 0.2f);
 	glPushMatrix();
 	glTranslatef(x_, y_, 0.0f);
 	glBegin(GL_QUADS);
@@ -142,7 +143,7 @@ fire(void) {
 	bullet_t *bullet = bullet_create();
 	bullet->rect = rect_create(x_, y_ - size_ / 2, 10, 10);
 	bullet->x_vel = 0;
-	bullet->y_vel = -0.4f;
+	bullet->y_vel = -1.8f;
 	bullet->player = true;
 	bullet->type = BULLET_SQUARE;
 

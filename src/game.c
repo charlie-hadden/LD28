@@ -24,7 +24,7 @@ game_handle_event(SDL_Event *event) {
 }
 
 static float angle = 0;
-static int fire_interval = 10, fire_cooldown = 0;
+static int fire_interval = 30, fire_cooldown = 0;
 
 void
 game_update(void) {
@@ -32,16 +32,18 @@ game_update(void) {
 	if (fire_cooldown <= 0) {
 		bullet_t *bullet = bullet_create();
 		bullet->rect = rect_create(300, 100, 20, 20);
-		bullet->x_vel = sin(angle) * 2.2;
-		bullet->y_vel = cos(angle) * 2.5;
+		bullet->x_vel = sin(angle) * 1.2;
+		bullet->y_vel = cos(angle) * 1.5;
 		bullet->type = BULLET_SQUARE;
+		bullet->player = false;
 		bullet_spawn(bullet);
 
 		bullet = bullet_create();
 		bullet->rect = rect_create(300, 100, 20, 20);
-		bullet->x_vel = -sin(angle) * 2.2;
-		bullet->y_vel = -cos(angle) * 2.5;
+		bullet->x_vel = -sin(angle) * 1.2;
+		bullet->y_vel = -cos(angle) * 1.5;
 		bullet->type = BULLET_SQUARE;
+		bullet->player = false;
 		bullet_spawn(bullet);
 
 		fire_cooldown = fire_interval;
@@ -53,6 +55,7 @@ game_update(void) {
 		states_queue_change(STATE_MENU);
 
 	if (!game_over_) {
+		color_update();
 		player_update();
 		bullet_update();
 	}

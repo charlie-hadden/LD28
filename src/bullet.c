@@ -82,7 +82,8 @@ bullet_draw(void) {
 
 static void
 bullet_draw_square(void) {
-	glColor3f(0.8f, 0.2f, 0.2f);
+	SDL_Color enemy_color = color_get(COLOR_ENEMY);
+	SDL_Color player_color = color_get(COLOR_PLAYER);
 	glBegin(GL_QUADS);
 
 	for (unsigned i = 0; i < MAX_BULLETS; i++) {
@@ -93,6 +94,12 @@ bullet_draw_square(void) {
 
 		float x = bullet->rect->x, y = bullet->rect->y;
 		float half_w = bullet->rect->w / 2, half_h = bullet->rect->h / 2;
+
+		if (bullet->player) {
+			glColor3f(player_color.r / 255.0f, player_color.g / 255.0f, player_color.b / 255.0f);
+		} else {
+			glColor3f(enemy_color.r / 255.0f, enemy_color.g / 255.0f, enemy_color.b / 255.0f);
+		}
 
 		glVertex2f(x - half_w, y - half_h);
 		glVertex2f(x + half_w, y - half_h);

@@ -4,15 +4,13 @@
 #include "common.h"
 
 typedef enum {
-	COLOR_BACKGROUND,
-	COLOR_FRIENDLY_A,
-	COLOR_FRIENDLY_B,
-	COLOR_HOSTILE_A,
-	COLOR_HOSTILE_B
+	COLOR_BASE = 0,
+	COLOR_ENEMY = 360 / 3,
+	COLOR_PLAYER = (360 / 3) * 2
 } colors;
 
 void color_init(void);
-void color_update(unsigned int delta_time);
+void color_update(void);
 
 SDL_Color color_get(colors color);
 

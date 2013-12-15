@@ -1,36 +1,62 @@
 #include "color.h"
 
-static SDL_Color background_ = { 0xFF, 0xFA, 0x00 };
-static SDL_Color friendly_a_ = { 0x20, 0xDD, 0x20 };
-static SDL_Color friendly_b_ = { 0x20, 0xFF, 0x20 };
-static SDL_Color hostile_a_ = { 0xDD, 0x20, 0x20 };
-static SDL_Color hostile_b_ = { 0xFF, 0x20, 0x20 };
+static float hue_ = 0;
+
+static float color_to_rgb(float p, float q, float t);
 
 void
 color_init(void) {
+	hue_ = rand() % 360;
 }
 
 void
-color_update(unsigned int delta_time) {
-//	float r = delta_time;
-//	float g = delta_time;
-//	float b = delta_time;
+color_update() {
+	hue_ += 0.1;
 
-	background_.r += 1;
-	background_.g += 1;
-	background_.b += 1;
+	if (hue_ >= 360)
+		hue_ -= 360;
 }
 
 SDL_Color
 color_get(colors color) {
-	switch(color) {
-		case COLOR_BACKGROUND: return background_;
-		case COLOR_FRIENDLY_A: return friendly_a_;
-		case COLOR_FRIENDLY_B: return friendly_b_;
-		case COLOR_HOSTILE_A: return hostile_a_;
-		case COLOR_HOSTILE_B: return hostile_b_;
-	}
+	float s = 1.0f;
+	float l = 0.5f;
 
-	SDL_Color ret = { 0, 0, 0 };
-	return ret;
+	float q = (l < 0.5) ? l * (1 + s) : l + s - l * s;
+	float p = 2.0f * l - q;
+
+	float hue = hue_ + color;
+	while (hue > 360)
+		hue -= 360;
+	while (hue < 0)
+		hue += 360;
+	hue = hue / 360.0f;
+
+	float r = color_to_rgb(p, q, hue + 1.0f / 3.0f);
+	float g = color_to_rgb(p, q, hue);
+	float b = color_to_rgb(p, q, hue - 1.0f / 3.0f);
+
+	SDL_Color sdl_color = { r * 255, g * 255, b * 255 };
+
+	return sdl_color;
+}
+
+static float
+color_to_rgb(float p, float q, float t) {
+	if (t < 0)
+		t += 1;
+
+	if (t > 1)
+		t -= 1;
+
+	if (t < 1.0f / 6.0f)
+		return p + (q - p) * 6.0f * t;
+
+	if (t < 1.0f / 2.0f)
+		return q;
+
+	if (t < 2.0f / 3.0f)
+		return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
+
+	return p;
 }

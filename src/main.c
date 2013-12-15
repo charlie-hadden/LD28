@@ -1,3 +1,4 @@
+#include <time.h>
 #include "common.h"
 #include "window.h"
 #include "states.h"
@@ -10,13 +11,15 @@ static void update();
 static void draw(void);
 
 int main(int argc, char *argv[]) {
+	srand(time(NULL));
+
 	init();
 
 	bool running = true;
 	SDL_Event event;
 
 	uint64_t last_time = SDL_GetTicks(), current_time, delta_time;
-	double ms_per_update = 1000.0f / 60, unprocessed = 0;
+	double ms_per_update = 1000.0f / 144, unprocessed = 0;
 	unsigned int readout_time = 0, updates = 0, frames = 0;
 
 	while (running) {
@@ -53,50 +56,6 @@ int main(int argc, char *argv[]) {
 			SDL_Delay(frame_time);
 	}
 
-	/*
-	double last_time = 0, current_time;
-	unsigned int last_fps_time = 0, updates = 0, frames = 0;
-
-	while (running) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT)
-				running = false;
-
-			handle_event(&event);
-		}
-
-		current_time = SDL_GetTicks();
-		unsigned int unprocessed = current_time - last_time * 60;
-
-		while (unprocessed) {
-			update(current_time - last_time);
-			updates++;
-			unprocessed = 0;
-		}
-
-		last_time = current_time;
-
-		draw();
-
-		printf("delta time: %f\n", current_time - last_time);
-
-		current_time = SDL_GetTicks();
-		delta_time = current_time - last_time;
-		last_time = current_time;
-
-		frames++;
-		if (current_time >= last_fps_time + 1000) {
-			printf("%u Ticks, %u FPS\n", updates, frames);
-			frames = 0;
-			updates = 0;
-			last_fps_time = current_time;
-		}
-
-		SDL_Delay(16);
-		update(delta_time);
-		draw();
-	}
-*/
 	cleanup();
 	return EXIT_SUCCESS;
 }
@@ -104,6 +63,7 @@ int main(int argc, char *argv[]) {
 static void
 init(void) {
 	window_init("You only get one", 600, 800);
+	color_init();
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
 
@@ -134,7 +94,8 @@ update(void) {
 
 static void
 draw(void) {
-	glClearColor(0.2f, 0.2f, 0.8f, 1.0f);
+	SDL_Color color = color_get(COLOR_BASE);
+	glClearColor(color.r / 254.0f, color.g / 254.0f, color.b / 254.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	state_t *state = states_get_state();

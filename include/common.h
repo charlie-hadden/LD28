@@ -9,6 +9,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <GL/glew.h>
 #include <linmath.h>
+#include "color.h"
 
 void die(const char *msg);
 

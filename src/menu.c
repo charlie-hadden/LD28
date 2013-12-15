@@ -59,16 +59,18 @@ menu_draw(void) {
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 
 	// Draw backgrounds
+	SDL_Color color;
 	glBegin(GL_QUADS);
 	for (int i = 0; i < NUM_MENU_BUTTONS; i++) {
 		float x = buttons_[i].rect->x, y = buttons_[i].rect->y;
 		float half_w = buttons_[i].rect->w / 2, half_h = buttons_[i].rect->h / 2;
 
 		if (rect_contains_point(buttons_[i].rect, mouse_x, mouse_y)) {
-			glColor3f(0.5, 0.1, 0.5);
+			color = color_get(COLOR_ENEMY + 15);
 		} else {
-			glColor3f(0.2, 0.1, 0.5);
+			color = color_get(COLOR_ENEMY);
 		}
+		glColor3f(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f);
 
 		glVertex2f(x - half_w, y - half_h);
 		glVertex2f(x + half_w, y - half_h);
@@ -78,14 +80,17 @@ menu_draw(void) {
 	glEnd();
 
 	// Draw lables
+	color = color_get(COLOR_PLAYER);
+	glColor3i(color.r, color.g, color.b);
 	glEnable(GL_TEXTURE_2D);
 	glBegin(GL_QUADS);
-	glColor3f(1.0, 1.0, 1.0);
 	for (int i = 0; i < NUM_MENU_BUTTONS; i++) {
 		float x = buttons_[i].rect->x, y = buttons_[i].rect->y;
 		int w = buttons_[i].w, h = buttons_[i].h;
 
 		glBindTexture(GL_TEXTURE_2D, buttons_[i].text);
+		glColor3f(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f);
+
 		glTexCoord2f(0.0, 0.0);
 		glVertex2f(x - w / 2, y - h / 2);
 
@@ -107,7 +112,7 @@ menu_draw_text(const char *text, int *w, int *h) {
 	if (!font_)
 		return 0;
 
-	SDL_Color color = {0, 0, 0};
+	SDL_Color color = { 255, 255, 255 };
 	SDL_Surface *surface = TTF_RenderText_Blended(font_, text, color);
 	if (!surface)
 		fprintf(stderr, "Could not print text: %s\n", TTF_GetError());
