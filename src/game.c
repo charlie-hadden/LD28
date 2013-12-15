@@ -1,10 +1,12 @@
 #include "game.h"
 
+static float difficulty_ = 1.0;
 static bool game_over_ = false;
 
 void
 game_init(void) {
 	game_over_ = false;
+	enemy_init();
 	bullet_init();
 	player_init();
 	window_set_grab(true);
@@ -13,6 +15,7 @@ game_init(void) {
 
 void
 game_cleanup(void) {
+	enemy_cleanup();
 	bullet_cleanup();
 	player_cleanup();
 	window_set_grab(false);
@@ -23,39 +26,15 @@ void
 game_handle_event(SDL_Event *event) {
 }
 
-static float angle = 0;
-static int fire_interval = 30, fire_cooldown = 0;
-
 void
 game_update(void) {
-	fire_cooldown--;
-	if (fire_cooldown <= 0) {
-		bullet_t *bullet = bullet_create();
-		bullet->rect = rect_create(300, 100, 20, 20);
-		bullet->x_vel = sin(angle) * 1.2;
-		bullet->y_vel = cos(angle) * 1.5;
-		bullet->type = BULLET_SQUARE;
-		bullet->player = false;
-		bullet_spawn(bullet);
-
-		bullet = bullet_create();
-		bullet->rect = rect_create(300, 100, 20, 20);
-		bullet->x_vel = -sin(angle) * 1.2;
-		bullet->y_vel = -cos(angle) * 1.5;
-		bullet->type = BULLET_SQUARE;
-		bullet->player = false;
-		bullet_spawn(bullet);
-
-		fire_cooldown = fire_interval;
-		angle -= 0.2;
-	}
-
 	const uint8_t *keys = SDL_GetKeyboardState(NULL);
 	if (game_over_ && keys[SDL_SCANCODE_SPACE])
 		states_queue_change(STATE_MENU);
 
 	if (!game_over_) {
 		color_update();
+		enemy_update();
 		player_update();
 		bullet_update();
 	}
@@ -64,7 +43,18 @@ game_update(void) {
 void
 game_draw(void) {
 	bullet_draw();
+	enemy_draw();
 	player_draw();
+}
+
+float
+game_get_difficulty(void) {
+	return difficulty_;
+}
+
+void
+game_set_difficulty(float difficulty) {
+	difficulty_ = difficulty;
 }
 
 void
