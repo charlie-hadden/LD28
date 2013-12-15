@@ -15,7 +15,7 @@ void
 player_init(void) {
 	x_ = 300;
 	y_ = 600;
-	size_ = 50;
+	size_ = 30;
 
 	rect_ = rect_create(0, 0, 0, 0);
 }
