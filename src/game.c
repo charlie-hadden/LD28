@@ -66,9 +66,9 @@ game_update(void) {
 
 	if (!game_over_) {
 		color_update();
+		bullet_update();
 		enemy_update();
 		player_update();
-		bullet_update();
 	}
 }
 

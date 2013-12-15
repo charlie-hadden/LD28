@@ -39,6 +39,34 @@ enemy_free(enemy_t *enemy) {
 	}
 }
 
+enemy_t*
+enemy_get(int index) {
+	return enemies_[index];
+}
+
+void
+enemy_set(int index, enemy_t *val) {
+	if (!val)
+		count_--;
+
+	enemies_[index] = val;
+}
+
+void
+enemy_check_bullet(rect_t *bullet, vec3 vel) {
+	for (int i = 0; i < MAX_ENEMIES; i++) {
+		enemy_t *enemy = enemies_[i];
+		if (!enemy)
+			continue;
+
+		if (rect_collides(enemy->rect, bullet, vel)) {
+			enemy_free(enemy);
+			enemies_[i] = NULL;
+			count_--;
+		}
+	}
+}
+
 void
 enemy_spawn(enemy_t *enemy) {
 	for (unsigned i = 0; i < MAX_ENEMIES; i++) {

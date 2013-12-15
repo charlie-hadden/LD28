@@ -25,6 +25,11 @@ void enemy_cleanup(void);
 enemy_t *enemy_create(void);
 void enemy_free(enemy_t *enemy);
 
+enemy_t *enemy_get(int index);
+void enemy_set(int index, enemy_t *val);
+
+void enemy_check_bullet(rect_t *bullet, vec3 vel);
+
 void enemy_spawn(enemy_t *enemy);
 void enemy_update(void);
 void enemy_draw(void);

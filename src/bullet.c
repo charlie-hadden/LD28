@@ -69,6 +69,9 @@ bullet_update(void) {
 			break;
 		}
 
+		if (bullet->player)
+			enemy_check_bullet(bullet->rect, vel);
+
 		bullet->rect->x += bullet->x_vel;
 		bullet->rect->y += bullet->y_vel;
 	}
