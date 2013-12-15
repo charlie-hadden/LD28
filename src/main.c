@@ -62,8 +62,8 @@ int main(int argc, char *argv[]) {
 
 static void
 init(void) {
-	window_init("You only get one", 600, 800);
-	text_init("assets/onyx.ttf", 28);
+	window_init("Ultimate Pew-Pew", 600, 800);
+	text_init("assets/onyx.ttf", 58, 28);
 	color_init();
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
