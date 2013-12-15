@@ -60,8 +60,6 @@ enemy_update(void) {
 	//     Move
 	//     spawn bullets
 
-	printf("difficulty: %f\n", game_get_difficulty());
-
 	spawn_cooldown_--;
 	if (spawn_cooldown_ <= 0 && target_enemies_ * game_get_difficulty() > count_) {
 		spawn_cooldown_ = spawn_rate_;
