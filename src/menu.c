@@ -1,24 +1,13 @@
 #include "menu.h"
 
-static TTF_Font *font_;
-
 #define NUM_MENU_BUTTONS 1
 static menu_button_t buttons_[NUM_MENU_BUTTONS];
-
-static GLuint menu_draw_text(const char *text, int *w, int *h);
 
 static void menu_click_play(void);
 
 void
 menu_init(void) {
-	if (TTF_Init() == -1)
-		fprintf(stderr, "Could not initialize SDL_ttf: %s\n", TTF_GetError());
-
-	font_ = TTF_OpenFont("assets/ABSTRACT.TTF", 18);
-	if (!font_)
-		fprintf(stderr, "SDL_ttf error: %s\n", TTF_GetError());
-
-	buttons_[0].text = menu_draw_text("Play", &buttons_[0].w, &buttons_[0].h);
+	buttons_[0].text = text_write("PLAY", &buttons_[0].w, &buttons_[0].h);
 	buttons_[0].rect = rect_create(window_width() / 2, window_height() - 75, 200, 50);
 	buttons_[0].click = &menu_click_play;
 }
@@ -29,10 +18,6 @@ menu_cleanup(void) {
 		glDeleteTextures(1, &buttons_[i].text);
 		rect_free(buttons_[i].rect);
 	}
-
-	TTF_CloseFont(font_);
-	font_ = NULL;
-	TTF_Quit();
 }
 
 void
@@ -105,38 +90,6 @@ menu_draw(void) {
 	}
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-}
-
-static GLuint
-menu_draw_text(const char *text, int *w, int *h) {
-	if (!font_)
-		return 0;
-
-	SDL_Color color = { 255, 255, 255 };
-	SDL_Surface *surface = TTF_RenderText_Blended(font_, text, color);
-	if (!surface)
-		fprintf(stderr, "Could not print text: %s\n", TTF_GetError());
-
-	*w = surface->w;
-	*h = surface->h;
-
-	glEnable(GL_TEXTURE_2D);
-
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA,
-			GL_UNSIGNED_BYTE, surface->pixels);
-
-	glDisable(GL_TEXTURE_2D);
-
-	SDL_FreeSurface(surface);
-
-	return texture;
 }
 
 static void

@@ -13,10 +13,11 @@ static void fire(void);
 
 void
 player_init(void) {
+	window_warp_cursor(300, 600);
+
 	x_ = 300;
 	y_ = 600;
 	size_ = 30;
-
 	rect_ = rect_create(0, 0, 0, 0);
 }
 

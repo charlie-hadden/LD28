@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
 static void
 init(void) {
 	window_init("You only get one", 600, 800);
+	text_init("assets/onyx.ttf", 28);
 	color_init();
 
 	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
@@ -73,6 +74,7 @@ init(void) {
 static void
 cleanup(void) {
 	states_cleanup();
+	text_cleanup();
 	window_cleanup();
 }
 

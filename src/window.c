@@ -69,3 +69,8 @@ void
 window_set_grab(bool grab) {
 	SDL_SetWindowGrab(window_, grab);
 }
+
+void
+window_warp_cursor(int x, int y) {
+	SDL_WarpMouseInWindow(window_, x, y);
+}
