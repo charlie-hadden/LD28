@@ -61,8 +61,9 @@ game_update(unsigned int delta_time) {
 	}
 
 	SDL_ShowCursor(game_over_);
-	if (game_over_)
-		states_queue_change(STATE_MENU);
+	const uint8_t *keys = SDL_GetKeyboardState(NULL);
+	if (game_over_ && keys[SDL_SCANCODE_SPACE])
+		states_queue_change(STATE_GAME);
 
 	if (!game_over_) {
 		player_update(delta_time);

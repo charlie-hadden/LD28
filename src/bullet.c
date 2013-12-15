@@ -59,15 +59,18 @@ bullet_update(unsigned int delta_time) {
 			continue;
 		}
 
-		bullet->rect->x += bullet->x_vel * delta_time;
-		bullet->rect->y += bullet->y_vel * delta_time;
+		vec3 vel = { bullet->x_vel * delta_time, bullet->y_vel * delta_time, 0 };
 
-		if (!bullet->player && rect_intersecting(player, bullet->rect)) {
-			bullets_[i] = NULL;
-			bullet_free(bullet);
+		if (!bullet->player && rect_collides(player, bullet->rect, vel)) {
+			printf("bullet move\n");
+//			bullets_[i] = NULL;
+//			bullet_free(bullet);
 			game_gameover();
 			break;
 		}
+
+		bullet->rect->x += bullet->x_vel * delta_time;
+		bullet->rect->y += bullet->y_vel * delta_time;
 	}
 }
 
@@ -121,16 +124,17 @@ bullet_draw_round(void) {
 }
 
 void
-bullet_check_collisions(rect_t *rect) {
+bullet_check_collisions(rect_t *rect, vec3 vel) {
 	for (unsigned i = 0; i < MAX_BULLETS; i++) {
 		bullet_t *bullet = bullets_[i];
 
 		if (bullet == NULL)
 			continue;
 
-		if (!bullet->player && rect_intersecting(rect, bullet->rect)) {
-			bullets_[i] = NULL;
-			bullet_free(bullet);
+		if (!bullet->player && rect_collides(bullet->rect, rect, vel)) {
+			printf("Player move\n");
+//			bullets_[i] = NULL;
+//			bullet_free(bullet);
 			game_gameover();
 			break;
 		}
