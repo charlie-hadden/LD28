@@ -106,7 +106,7 @@ enemy_update(void) {
 		float size = 40;
 
 		enemy_t *enemy = enemy_create();
-		enemy->rect = rect_create((rand() % window_width() - 80) + 40, (rand() % 150) + 40, size, size);
+		enemy->rect = rect_create((rand() % (window_width() - 80)) + 40, (rand() % 150) + 40, size, size);
 		enemy->last_x_vel = 1.5f * game_get_difficulty();
 		int rnd = (rand() % 2) - 1;
 		enemy->last_x_vel *= (rnd >= 0) ? 1 : -1;

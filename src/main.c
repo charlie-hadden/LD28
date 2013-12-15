@@ -62,11 +62,11 @@ int main(int argc, char *argv[]) {
 
 static void
 init(void) {
-	window_init("Super Pew-Pew", 600, 800);
+	window_init("Super Pew-Pew", 600, 700);
 	text_init("assets/onyx.ttf", 58, 28);
 	color_init();
 
-	glOrtho(0.0, 600.0, 800.0, 0.0, -1, 1);
+	glOrtho(0.0, 600.0, 700.0, 0.0, -1, 1);
 
 	states_init();
 }
