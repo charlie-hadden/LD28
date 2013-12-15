@@ -44,7 +44,7 @@ bullet_spawn(bullet_t *bullet) {
 }
 
 void
-bullet_update(unsigned int delta_time) {
+bullet_update(void) {
 	rect_t *player = player_get_rect();
 	rect_t *window = window_get_rect();
 
@@ -59,7 +59,7 @@ bullet_update(unsigned int delta_time) {
 			continue;
 		}
 
-		vec3 vel = { bullet->x_vel * delta_time, bullet->y_vel * delta_time, 0 };
+		vec3 vel = { bullet->x_vel, bullet->y_vel, 0 };
 
 		if (!bullet->player && rect_collides(player, bullet->rect, vel)) {
 			printf("bullet move\n");
@@ -69,8 +69,8 @@ bullet_update(unsigned int delta_time) {
 			break;
 		}
 
-		bullet->rect->x += bullet->x_vel * delta_time;
-		bullet->rect->y += bullet->y_vel * delta_time;
+		bullet->rect->x += bullet->x_vel;
+		bullet->rect->y += bullet->y_vel;
 	}
 }
 
@@ -115,7 +115,7 @@ bullet_draw_round(void) {
 		if (!bullet || bullet->type != BULLET_ROUND)
 			continue;
 
-		glPointSize((bullet->rect->w + bullet->rect->h) / 2);
+		glPointSize(bullet->rect->w);
 		glVertex2f(bullet->rect->x, bullet->rect->y);
 	}
 

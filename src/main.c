@@ -6,7 +6,7 @@ static void init(void);
 static void cleanup(void);
 
 static void handle_event(SDL_Event *event);
-static void update(unsigned int delta_time);
+static void update();
 static void draw(void);
 
 int main(int argc, char *argv[]) {
@@ -14,8 +14,48 @@ int main(int argc, char *argv[]) {
 
 	bool running = true;
 	SDL_Event event;
-	unsigned int last_time = 0, current_time, delta_time;
-	unsigned int last_fps_time = 0, frames = 0;
+
+	uint64_t last_time = SDL_GetTicks(), current_time, delta_time;
+	double ms_per_update = 1000.0f / 60, unprocessed = 0;
+	unsigned int readout_time = 0, updates = 0, frames = 0;
+
+	while (running) {
+		current_time = SDL_GetTicks();
+		delta_time = current_time - last_time;
+		last_time = current_time;
+
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT)
+				running = false;
+
+			handle_event(&event);
+		}
+
+		unprocessed += delta_time / ms_per_update;
+		while (unprocessed >= 1) {
+			update();
+			updates++;
+			unprocessed -= 1;
+		}
+
+		update(delta_time);
+		draw();
+		frames++;
+
+		if (current_time >= readout_time + 1000) {
+			printf("%u Updates, %u FPS\n", updates, frames);
+			updates = frames = 0;
+			readout_time = current_time;
+		}
+
+		int frame_time = ms_per_update - (SDL_GetTicks() - current_time);
+		if (frame_time > 0)
+			SDL_Delay(frame_time);
+	}
+
+	/*
+	double last_time = 0, current_time;
+	unsigned int last_fps_time = 0, updates = 0, frames = 0;
 
 	while (running) {
 		while (SDL_PollEvent(&event)) {
@@ -26,20 +66,37 @@ int main(int argc, char *argv[]) {
 		}
 
 		current_time = SDL_GetTicks();
+		unsigned int unprocessed = current_time - last_time * 60;
+
+		while (unprocessed) {
+			update(current_time - last_time);
+			updates++;
+			unprocessed = 0;
+		}
+
+		last_time = current_time;
+
+		draw();
+
+		printf("delta time: %f\n", current_time - last_time);
+
+		current_time = SDL_GetTicks();
 		delta_time = current_time - last_time;
 		last_time = current_time;
 
 		frames++;
 		if (current_time >= last_fps_time + 1000) {
-			printf("%u FPS\n", frames);
+			printf("%u Ticks, %u FPS\n", updates, frames);
 			frames = 0;
+			updates = 0;
 			last_fps_time = current_time;
 		}
 
+		SDL_Delay(16);
 		update(delta_time);
 		draw();
 	}
-
+*/
 	cleanup();
 	return EXIT_SUCCESS;
 }
@@ -67,12 +124,12 @@ handle_event(SDL_Event *event) {
 }
 
 static void
-update(unsigned int delta_time) {
+update(void) {
 	states_update();
 
 	state_t *state = states_get_state();
 	if (state->update)
-		state->update(delta_time);
+		state->update();
 }
 
 static void

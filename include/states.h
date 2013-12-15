@@ -10,7 +10,7 @@ typedef struct {
 	void (*init)(void);
 	void (*cleanup)(void);
 	void (*handle_event)(SDL_Event *event);
-	void (*update)(unsigned int delta_time);
+	void (*update)();
 	void (*draw)(void);
 } state_t;
 

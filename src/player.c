@@ -26,7 +26,7 @@ player_cleanup(void) {
 }
 
 void
-player_update(unsigned int delta_time) {
+player_update(void) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 	const uint8_t *state = SDL_GetKeyboardState(NULL);
@@ -63,7 +63,7 @@ player_update(unsigned int delta_time) {
 		vec3_norm(vel, vel);
 	}
 
-	vec3_scale(vel, vel, 0.8 * delta_time);
+	vec3_scale(vel, vel, 3.4);
 
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
 		vec3_scale(vel, vel, 0.6);
@@ -92,7 +92,7 @@ player_update(unsigned int delta_time) {
 	if (y_ + size_ / 2 >= window_height())
 		y_ = window_height() - size_ / 2;
 
-	fire_cooldown -= delta_time;
+	fire_cooldown -= 1;
 	if (fire_cooldown <= 0) {
 		fire();
 		fire_cooldown = fire_time;
