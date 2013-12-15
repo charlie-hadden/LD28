@@ -73,8 +73,8 @@ enemy_update(void) {
 		enemy->last_y_vel = 1.5f * game_get_difficulty();
 		enemy->type = ENEMY_STRAFER;
 		enemy->angle = 0;
-		enemy->cooldown = 0;
-		enemy->fire_rate = 100;
+		enemy->cooldown = rand() % 70;
+		enemy->fire_rate = 100 + (rand() % 30 / 2);
 		enemy_spawn(enemy);
 	}
 
