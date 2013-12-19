@@ -73,6 +73,7 @@ text_rewrite(GLuint texture, const char *text, int *w, int *h) {
 			GL_UNSIGNED_BYTE, surface->pixels);
 
 	glDisable(GL_TEXTURE_2D);
+	SDL_FreeSurface(surface);
 }
 
 static GLuint
